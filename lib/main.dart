@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       getPages: AppPages.routes,
-      initialRoute: Routes.HOME,
+      initialRoute: Routes.LOGIN,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

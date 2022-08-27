@@ -1,9 +1,12 @@
+import 'package:coinmarketcap/app/route/app_pages.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/linecons_icons.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/elusive_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:get/get.dart';
 
 class AccountView extends StatelessWidget {
   const AccountView({Key? key}) : super(key: key);
@@ -36,18 +39,18 @@ class AccountView extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Text(
-                          "Mohsen Ghaffari",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          FirebaseAuth.instance.currentUser!.email!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
-                      ListTile(
+                      const ListTile(
                         leading: Icon(
                           LineariconsFree.diamond_1,
                           size: 20,
@@ -184,24 +187,32 @@ class AccountView extends StatelessWidget {
                   ],
                 ),
               ),
-              Card(
-                shape: RoundedRectangleBorder(
-                    side: const BorderSide(color: Colors.white70, width: 1),
-                    borderRadius: BorderRadius.circular(10)),
-                shadowColor: Colors.black87,
-                color: const Color(0xFFF1FEFC),
-                child: const ListTile(
-                  leading: Icon(
-                    FontAwesome.logout,
-                    color: Colors.blue,
-                    size: 20,
-                  ),
-                  title: Text("Sign Out",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                  trailing: Icon(
-                    Icons.navigate_next_rounded,
-                    color: Colors.blue,
+              GestureDetector(
+                onTap: () {
+                  FirebaseAuth.instance.signOut().then((value) {
+                    debugPrint("Signed Out");
+                    Get.offAndToNamed(Routes.LOGIN);
+                  });
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.white70, width: 1),
+                      borderRadius: BorderRadius.circular(10)),
+                  shadowColor: Colors.black87,
+                  color: const Color(0xFFF1FEFC),
+                  child: const ListTile(
+                    leading: Icon(
+                      FontAwesome.logout,
+                      color: Colors.blue,
+                      size: 20,
+                    ),
+                    title: Text("Sign Out",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 13)),
+                    trailing: Icon(
+                      Icons.navigate_next_rounded,
+                      color: Colors.blue,
+                    ),
                   ),
                 ),
               )
