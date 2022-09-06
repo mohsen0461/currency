@@ -2,6 +2,7 @@ import 'package:coinmarketcap/app/data/models/coins/coin.dart';
 import 'package:coinmarketcap/app/modules/home/controllers/home_page_controller.dart';
 import 'package:coinmarketcap/app/modules/home/view/first_coin_list_view.dart';
 import 'package:coinmarketcap/app/modules/home/view/second_coin_list_view.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -22,7 +23,35 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
+    // Get information from API
     homePageController.getCurency();
+
+    // terminated state
+    FirebaseMessaging.instance.getInitialMessage().then((event) {
+      if (event != null) {
+        setState(() {
+          homePageController.notificationsMsg.value =
+              "${event.notification!.title} ${event.notification!.body} I am coming from terminated state";
+        });
+      }
+    });
+
+    // forground state
+    FirebaseMessaging.onMessage.listen((event) {
+      setState(() {
+        homePageController.notificationsMsg.value =
+            "${event.notification!.title} ${event.notification!.body} I am coming from forground";
+      });
+    });
+
+    // background state
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      setState(() {
+        homePageController.notificationsMsg.value =
+            "${event.notification!.title} ${event.notification!.body} I am coming from background";
+      });
+    });
   }
 
   @override

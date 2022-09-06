@@ -39,13 +39,21 @@ class SignInView extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              reusableTextField("Enter UserName", Icons.person_outline,
-                  emailTextController, false),
+              reusableTextField("Enter Your Email", Icons.person_outline,
+                  emailTextController, false, (text) {
+                if (text!.isEmpty) {
+                  return "Please Enter UserName";
+                }
+              }),
               const SizedBox(
                 height: 20,
               ),
               reusableTextField("Enter Password", Icons.lock_outline,
-                  passwordTextController, true),
+                  passwordTextController, true, (text) {
+                if (text!.isEmpty) {
+                  return "Please Enter Password";
+                }
+              }),
               const SizedBox(
                 height: 20,
               ),
@@ -55,10 +63,12 @@ class SignInView extends StatelessWidget {
                         email: emailTextController.text,
                         password: passwordTextController.text)
                     .then((value) {
-                  debugPrint("Log in with email and password");
-                  Get.toNamed(Routes.HOME);
+                  debugPrint("Log in with email and password"); 
+                  Get.offAndToNamed(Routes.HOME);
                 }).onError((error, stackTrace) {
                   debugPrint("Error ${error.toString()}");
+                  Get.snackbar("Log Error", "Email Addres Not fined",
+                      duration: const Duration(seconds: 4));
                 });
               }),
               signUpOption()

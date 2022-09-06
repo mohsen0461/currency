@@ -23,6 +23,8 @@ class HomePageController extends GetxController {
 
   RxList<CoinDto?> coins = <CoinDto>[].obs;
 
+  RxString notificationsMsg = "".obs;
+
   Future<List<CoinDto?>> getCurency() async {
     inProgress.value = true;
 
