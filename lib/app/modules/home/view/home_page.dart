@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     // Get information from API
     homePageController.getCurency();
 
-    // terminated state
+    // terminated state message
     FirebaseMessaging.instance.getInitialMessage().then((event) {
       if (event != null) {
         setState(() {
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    // forground state
+    // forground state message
     FirebaseMessaging.onMessage.listen((event) {
       setState(() {
         homePageController.notificationsMsg.value =
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
       });
     });
 
-    // background state
+    // background state message
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       setState(() {
         homePageController.notificationsMsg.value =
@@ -129,113 +129,122 @@ class HomePageView extends GetView<HomePageController> {
           titleTextStyle: const TextStyle(color: Colors.blue),
           title: const Text("CoinMarketCap"),
         ),
-        body: FutureBuilder(
-          future: controller.getCurency(),
+        body: StreamBuilder(
+          stream: controller.getCurrencyStream(),
           builder: (BuildContext context, AsyncSnapshot<List<CoinDto?>> data) {
-            return controller.inProgress.value
-                ? Center(
-                    child: LoadingAnimationWidget.halfTriangleDot(
-                        color: Colors.blue, size: 50),
-                  )
-                : controller.coins.length.isNaN
-                    ? const Center(
-                        child: Text(
-                          "There is a problem in receiving information",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+            switch (data.connectionState) {
+              case ConnectionState.waiting:
+                return Center(
+                  child: LoadingAnimationWidget.halfTriangleDot(
+                      color: Colors.blue, size: 50),
+                );
+              default:
+                if (data.hasError) {
+                  return const Center(
+                    child: Text(
+                      "There is a problem in receiving information",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                } else {
+                  return RefreshIndicator(
+                    onRefresh: controller.onRefresh,
+                    child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView(children: [
+                          FirstCoinList(
+                            key: key,
+                            controller: homePageController,
                           ),
-                        ),
-                      )
-                    : RefreshIndicator(
-                        onRefresh: controller.onRefresh,
-                        child: Padding(
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: ListView(children: [
-                              FirstCoinList(
-                                key: key,
-                                controller: homePageController,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      height: 20,
-                                      width: 120,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(8)),
-                                          border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 223, 220, 220)),
-                                        ),
-                                        child: const Center(
-                                          child: Text("Trading Markets",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12)),
-                                        ),
-                                      ),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                  width: 120,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(8)),
+                                      border: Border.all(
+                                          color: const Color.fromARGB(
+                                              255, 223, 220, 220)),
                                     ),
-                                    Expanded(child: Container()),
-                                    // const SizedBox(width: 40,),
-                                    SizedBox(
-                                      height: 20,
-                                      width: 80,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(8)),
-                                          border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 223, 220, 220)),
-                                        ),
-                                        child: const Center(
-                                          child: Text("Price",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12)),
-                                        ),
-                                      ),
+                                    child: const Center(
+                                      child: Text("Trading Markets",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12)),
                                     ),
-                                    Expanded(child: Container()),
-                                    // const SizedBox(width: 30,),
-                                    SizedBox(
-                                      height: 20,
-                                      width: 90,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(8)),
-                                          border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 223, 220, 220)),
-                                        ),
-                                        child: const Center(
-                                          child: Text("1 H changes",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
-                                                  color: Colors.blue)),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              SecoundCoinList(
-                                key: key,
-                                controller: homePageController,
-                              )
-                            ])),
-                      );
+                                Expanded(child: Container()),
+                                // const SizedBox(width: 40,),
+                                SizedBox(
+                                  height: 20,
+                                  width: 80,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(8)),
+                                      border: Border.all(
+                                          color: const Color.fromARGB(
+                                              255, 223, 220, 220)),
+                                    ),
+                                    child: const Center(
+                                      child: Text("Price",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12)),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(child: Container()),
+                                // const SizedBox(width: 30,),
+                                SizedBox(
+                                  height: 20,
+                                  width: 90,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(8)),
+                                      border: Border.all(
+                                          color: const Color.fromARGB(
+                                              255, 223, 220, 220)),
+                                    ),
+                                    child: const Center(
+                                      child: Text("1 H changes",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: Colors.blue)),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SecoundCoinList(
+                            key: key,
+                            controller: homePageController,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ), 
+                          Center(child: Text(controller.notificationsMsg.value))
+                        ])),
+                  );
+                }
+            }
           },
         ));
   }

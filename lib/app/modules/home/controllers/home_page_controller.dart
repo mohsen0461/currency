@@ -25,6 +25,10 @@ class HomePageController extends GetxController {
 
   RxString notificationsMsg = "".obs;
 
+  Stream<List<CoinDto?>> getCurrencyStream() =>
+      Stream.periodic(const Duration(seconds: 1000))
+          .asyncMap((event) => getCurency());
+
   Future<List<CoinDto?>> getCurency() async {
     inProgress.value = true;
 

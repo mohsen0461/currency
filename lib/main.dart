@@ -1,4 +1,5 @@
 import 'package:coinmarketcap/app/route/app_pages.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -25,10 +26,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    bool isAuth = FirebaseAuth.instance.currentUser != null ? true : false;
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       getPages: AppPages.routes,
-      initialRoute: Routes.HOME,
+      initialRoute: isAuth ? Routes.HOME : Routes.LOGIN,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

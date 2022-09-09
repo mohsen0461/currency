@@ -6,19 +6,6 @@ class CoinResponse {
 
   CoinResponse({this.status, this.data});
 
-  // static Map<String, double> checkDouble(Map<String, dynamic> value) {
-  //   if (value.keys.contains("max_supply") && value.values.contains(int)) {
-  //     value.values.toString()
-  //   }
-  //   if (value["max_supply"] is int ||
-  //       value["circulating_supply"] is int ||
-  //       value["total_supply"] is int) {
-  //     return 0.0 + value;
-  //   } else {
-  //     return value;
-  //   }
-  // }
-
   CoinResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'] != null ? Status.fromJson(json['status']) : null;
     if (json['data'] != null) {
