@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class CurrencyView extends StatefulWidget {
   const CurrencyView({Key? key}) : super(key: key);
@@ -41,11 +42,33 @@ class _CurrencyViewState extends State<CurrencyView>
       ),
       body: TabBarView(
         controller: tabController,
-        children: const [
-          Center(child: Text("wallet1")),
+        children: [
+          GridView.custom(
+              gridDelegate: SliverQuiltedGridDelegate(
+                  crossAxisCount: 4,
+                  mainAxisSpacing: 4,
+                  crossAxisSpacing: 4,
+                  repeatPattern: QuiltedGridRepeatPattern.inverted,
+                  pattern: const [
+                    QuiltedGridTile(2, 2),
+                    QuiltedGridTile(1, 1),
+                    QuiltedGridTile(1, 1),
+                    QuiltedGridTile(1, 2)
+                  ]),
+              childrenDelegate: SliverChildBuilderDelegate(
+                  childCount: 20, (context, index) => buildImageCard(index))),
           Center(child: Text("wallet2"))
         ],
       ),
     );
   }
 }
+
+Widget buildImageCard(int index) => Card(
+      shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Colors.white70, width: 1),
+          borderRadius: BorderRadius.circular(10)),
+      shadowColor: Colors.black87,
+      color: const Color(0xFFF1FEFC),
+      child: Image.asset("images/btc.jpg"),
+    );

@@ -2,6 +2,7 @@ import 'package:coinmarketcap/app/data/models/coins/coin.dart';
 import 'package:coinmarketcap/app/modules/home/controllers/home_page_controller.dart';
 import 'package:coinmarketcap/app/modules/home/view/first_coin_list_view.dart';
 import 'package:coinmarketcap/app/modules/home/view/second_coin_list_view.dart';
+import 'package:coinmarketcap/app/services/local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,8 @@ class _HomePageState extends State<HomePage> {
     // Get information from API
     homePageController.getCurency();
 
+    LocalNotificationService.initilize();
+
     // terminated state message
     FirebaseMessaging.instance.getInitialMessage().then((event) {
       if (event != null) {
@@ -43,6 +46,7 @@ class _HomePageState extends State<HomePage> {
         homePageController.notificationsMsg.value =
             "${event.notification!.title} ${event.notification!.body} I am coming from forground";
       });
+      LocalNotificationService.showNotificationOnForeground(event);
     });
 
     // background state message
@@ -239,8 +243,8 @@ class HomePageView extends GetView<HomePageController> {
                           ),
                           const SizedBox(
                             height: 10,
-                          ), 
-                          Center(child: Text(controller.notificationsMsg.value))
+                          ),
+                          Center(child: Obx(() =>  Text(controller.notificationsMsg.value)))
                         ])),
                   );
                 }
