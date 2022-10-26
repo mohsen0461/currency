@@ -66,14 +66,12 @@ class _HomePageState extends State<HomePage> {
             homePageController.pages[homePageController.currentPageIndex.value],
         bottomNavigationBar: NavigationBarTheme(
           data: NavigationBarThemeData(
-              indicatorColor: Colors.white,
               labelTextStyle: MaterialStateProperty.all(const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   color: Colors.blue))),
           child: NavigationBar(
             elevation: 0,
-            backgroundColor: Colors.white,
             selectedIndex: homePageController.currentPageIndex.value,
             animationDuration: const Duration(milliseconds: 500),
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
@@ -129,7 +127,7 @@ class HomePageView extends GetView<HomePageController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          
           titleTextStyle: const TextStyle(color: Colors.blue),
           title: const Text("CoinMarketCap"),
         ),

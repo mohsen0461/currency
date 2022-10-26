@@ -1,3 +1,4 @@
+import 'package:coinmarketcap/app/modules/currency/view/news_page_view.dart';
 import 'package:coinmarketcap/app/modules/home/bindings/home_page_bindings.dart';
 import 'package:coinmarketcap/app/modules/home/view/home_page.dart';
 import 'package:coinmarketcap/app/modules/account/view/account_view.dart';
@@ -20,13 +21,18 @@ class AppPages {
     ),
 
     GetPage(
+      name: Routes.CURRENCYNEWS,
+      page: () => NewsPageView(),
+    ),
+
+    GetPage(
         name: Routes.HOME,
         page: () => const HomePage(),
         binding: HomePageBindings()),
 
     GetPage(
       name: Routes.PERSON,
-      page: () => const AccountView(),
+      page: () => AccountView(),
     ),
     GetPage(
       name: Routes.PERSONWALLET,

@@ -12,7 +12,6 @@ class CoinResponse {
       data = <CoinDto>[];
 
       json['data'].forEach((v) {
-        // checkDouble(v);
         data!.add(CoinDto.fromJson(v));
       });
     }

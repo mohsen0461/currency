@@ -1,4 +1,7 @@
+import 'package:coinmarketcap/app/modules/account/controller/account_controller.dart';
 import 'package:coinmarketcap/app/route/app_pages.dart';
+import 'package:coinmarketcap/app/utils/theme/controller/theme_controller.dart';
+import 'package:coinmarketcap/app/utils/theme/view/theme_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
@@ -8,20 +11,42 @@ import 'package:fluttericon/elusive_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
-class AccountView extends StatelessWidget {
-  const AccountView({Key? key}) : super(key: key);
+class AccountView extends GetView<AccountController> {
+  AccountView({Key? key}) : super(key: key);
+
+  final themeController = Get.find<ThemeController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
           title: const Text("Account"),
           centerTitle: true,
-          titleTextStyle: const TextStyle(color: Colors.blue),
-          leading: const Icon(
-            Icons.dark_mode_outlined,
-            color: Colors.black87,
+          leading: InkWell(
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            onTap: () {
+              if (Get.isDarkMode) {
+                themeController.changeThemeMode(ThemeMode.light);
+                themeController.saveTheme(false);
+                themeController.isDark.value = false;
+              } else {
+                themeController.changeThemeMode(ThemeMode.dark);
+                themeController.saveTheme(true);
+                themeController.isDark.value = true;
+              }
+            },
+            child: Obx(
+              () => themeController.isDark.value
+                  ? const Icon(
+                      Icons.wb_sunny_sharp,
+                      color: Colors.white,
+                    )
+                  : const Icon(
+                      Icons.dark_mode_outlined,
+                      color: Colors.black87,
+                    ),
+            ),
           ),
         ),
         body: Padding(
@@ -33,7 +58,7 @@ class AccountView extends StatelessWidget {
                     side: const BorderSide(color: Colors.white70, width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 shadowColor: Colors.black87,
-                color: const Color(0xFFF1FEFC),
+                // color: const Color(0xFFF1FEFC),
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
@@ -73,7 +98,7 @@ class AccountView extends StatelessWidget {
                     side: const BorderSide(color: Colors.white70, width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 shadowColor: Colors.black87,
-                color: const Color(0xFFF1FEFC),
+                // color: const Color(0xFFF1FEFC),
                 child: Column(
                   children: const [
                     ListTile(
@@ -153,7 +178,7 @@ class AccountView extends StatelessWidget {
                     side: const BorderSide(color: Colors.white70, width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 shadowColor: Colors.black87,
-                color: const Color(0xFFF1FEFC),
+                // color: const Color(0xFFF1FEFC),
                 child: Column(
                   children: const [
                     ListTile(
@@ -199,7 +224,7 @@ class AccountView extends StatelessWidget {
                       side: const BorderSide(color: Colors.white70, width: 1),
                       borderRadius: BorderRadius.circular(10)),
                   shadowColor: Colors.black87,
-                  color: const Color(0xFFF1FEFC),
+                  // color: const Color(0xFFF1FEFC),
                   child: const ListTile(
                     leading: Icon(
                       FontAwesome.logout,

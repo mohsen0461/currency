@@ -21,9 +21,6 @@ class _WalletState extends State<Wallet> with SingleTickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        titleTextStyle:
-            const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-        backgroundColor: Colors.white,
         bottom: TabBar(
             controller: tabController,
             indicatorWeight: 1.5,

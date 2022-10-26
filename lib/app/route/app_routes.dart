@@ -7,4 +7,5 @@ abstract class Routes {
   static const HOME = '/home';
   static const PERSON = '/person';
   static const PERSONWALLET = '/personwallet';
+  static const CURRENCYNEWS = '/currency/news';
 }

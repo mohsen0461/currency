@@ -10,23 +10,24 @@ import 'package:get/get.dart';
 
 class HomePageController extends GetxController {
   final CoinsApi coinsApi = CoinsApi();
+
   RxBool inProgress = false.obs;
 
-  List<Widget> pages = const [
-    HomePageView(),
-    CurrencyView(),
-    Wallet(),
+  List<Widget> pages =  [
+    const HomePageView(),
+    const CurrencyView(),
+    const Wallet(),
     AccountView(),
   ];
 
   RxInt currentPageIndex = 0.obs;
-
+ 
   RxList<CoinDto?> coins = <CoinDto>[].obs;
 
   RxString notificationsMsg = "".obs;
 
   Stream<List<CoinDto?>> getCurrencyStream() =>
-      Stream.periodic(const Duration(seconds: 10))
+      Stream.periodic(const Duration(seconds: 1000))
           .asyncMap((event) => getCurency());
 
   Future<List<CoinDto?>> getCurency() async {
@@ -46,6 +47,7 @@ class HomePageController extends GetxController {
     inProgress.value = false;
     return coins;
   }
+
 
   Future<void> onRefresh() async {
     try {
